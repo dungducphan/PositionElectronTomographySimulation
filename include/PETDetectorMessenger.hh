@@ -15,11 +15,6 @@ class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 
-/// Messenger class that defines commands for PETDetectorConstruction.
-///
-/// It implements commands:
-/// - /transform/setMethod method
-
 class PETDetectorMessenger: public G4UImessenger
 {
 public:

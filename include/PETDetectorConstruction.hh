@@ -63,6 +63,7 @@ private:
   G4Material *fYttriumOxide;
   G4Material *fSiliconDioxide;
   G4MaterialPropertiesTable *fLYSO_MPT;
+  G4MaterialPropertiesTable *fAir_MPT;
 
   PETDetectorMessenger *fMessenger;
 };

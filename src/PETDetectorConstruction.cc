@@ -12,6 +12,8 @@ PETDetectorConstruction::PETDetectorConstruction()
   world_hy(5.0 * m),
   world_hz(5.0 * m),
   fMessenger(NULL),
+  fLYSO_MPT(NULL),
+  fAir_MPT(NULL),
   fOpeningAngle(1.5),
   fInnerDiameter(50*cm),
   fOuterDiameter(60*cm),
@@ -90,20 +92,20 @@ void PETDetectorConstruction::BuildMaterial() {
                        50 * cm, 50 * cm, 50 * cm, 50 * cm,
                        50 * cm};
 
-  G4MaterialPropertiesTable *mpt1 = new G4MaterialPropertiesTable();
-  G4MaterialPropertiesTable *mpt2 = new G4MaterialPropertiesTable();
+  fLYSO_MPT = new G4MaterialPropertiesTable();
+  fAir_MPT = new G4MaterialPropertiesTable();
 
-  mpt1->AddProperty("FASTCOMPONENT", ene, fast, num);
-  mpt1->AddProperty("RINDEX", ene, rLyso, num);
-  mpt1->AddProperty("ABSLENGTH", ene, abs, num);
-  mpt1->AddConstProperty("SCINTILLATIONYIELD", 33.2 / keV);
-  mpt1->AddConstProperty("RESOLUTIONSCALE", 1);
-  mpt1->AddConstProperty("FASTTIMECONSTANT", 43 * ns);
+  fLYSO_MPT->AddProperty("FASTCOMPONENT", ene, fast, num);
+  fLYSO_MPT->AddProperty("RINDEX", ene, rLyso, num);
+  fLYSO_MPT->AddProperty("ABSLENGTH", ene, abs, num);
+  fLYSO_MPT->AddConstProperty("SCINTILLATIONYIELD", 0.5 / keV);
+  fLYSO_MPT->AddConstProperty("RESOLUTIONSCALE", 1);
+  fLYSO_MPT->AddConstProperty("FASTTIMECONSTANT", 43 * ns);
 
-  mpt2->AddProperty("RINDEX", ene, rAir, num);
+  fAir_MPT->AddProperty("RINDEX", ene, rAir, num);
 
-  fLYSO->SetMaterialPropertiesTable(mpt1);
-  fAir->SetMaterialPropertiesTable(mpt2);
+  fLYSO->SetMaterialPropertiesTable(fLYSO_MPT);
+  fAir->SetMaterialPropertiesTable(fAir_MPT);
 }
 
 G4VPhysicalVolume * PETDetectorConstruction::Construct() {
