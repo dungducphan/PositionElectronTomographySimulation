@@ -1,5 +1,7 @@
 #include "PETPhysicsList.hh"
 
+#include "G4LossTableManager.hh"
+
 #include "G4ProcessManager.hh"
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
@@ -7,7 +9,6 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
-
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -30,7 +31,11 @@
 G4ThreadLocal G4int PETPhysicsList::fVerboseLevel = 0;
 G4ThreadLocal G4int PETPhysicsList::fMaxNumPhotonStep = 1;
 G4ThreadLocal G4Cerenkov *PETPhysicsList::fCerenkovProcess = 0;
+G4ThreadLocal G4Scintillation *PETPhysicsList::fScintillationProcess = 0;
 G4ThreadLocal G4OpBoundaryProcess *PETPhysicsList::fBoundaryProcess = 0;
+G4ThreadLocal G4OpAbsorption *PETPhysicsList::fAbsorptionProcess = 0;
+G4ThreadLocal G4OpRayleigh *PETPhysicsList::fRayleighScatteringProcess = 0;
+G4ThreadLocal G4OpMieHG *PETPhysicsList::fMieHGScatteringProcess = 0;
 
 PETPhysicsList::PETPhysicsList() : G4VUserPhysicsList() {
   SetVerboseLevel(1);
@@ -66,13 +71,30 @@ void PETPhysicsList::ConstructProcess() {
 void PETPhysicsList::ConstructOp() {
   fCerenkovProcess = new G4Cerenkov("Cerenkov");
   fCerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotonStep);
-  fCerenkovProcess->SetMaxBetaChangePerStep(1.0);
+  fCerenkovProcess->SetMaxBetaChangePerStep(10.0);
   fCerenkovProcess->SetTrackSecondariesFirst(true);
 
+  fScintillationProcess = new G4Scintillation("Scintillation");
+  fScintillationProcess->SetScintillationYieldFactor(1.);
+  fScintillationProcess->SetTrackSecondariesFirst(true);
+
+  fAbsorptionProcess = new G4OpAbsorption();
+  fRayleighScatteringProcess = new G4OpRayleigh();
+  fMieHGScatteringProcess = new G4OpMieHG();
   fBoundaryProcess = new G4OpBoundaryProcess();
 
+  fScintillationProcess->SetVerboseLevel(fVerboseLevel);
   fCerenkovProcess->SetVerboseLevel(fVerboseLevel);
   fBoundaryProcess->SetVerboseLevel(fVerboseLevel);
+  fRayleighScatteringProcess->SetVerboseLevel(fVerboseLevel);
+  fMieHGScatteringProcess->SetVerboseLevel(fVerboseLevel);
+  fBoundaryProcess->SetVerboseLevel(fVerboseLevel);
+
+  // Use Birks Correction in the Scintillation process
+  if (G4Threading::IsMasterThread()) {
+    G4EmSaturation *emSaturation = G4LossTableManager::Instance()->EmSaturation();
+    fScintillationProcess->AddSaturation(emSaturation);
+  }
 
   auto particleIterator = GetParticleIterator();
   particleIterator->reset();
@@ -84,8 +106,16 @@ void PETPhysicsList::ConstructOp() {
       pmanager->AddProcess(fCerenkovProcess);
       pmanager->SetProcessOrdering(fCerenkovProcess, idxPostStep);
     }
+    if (fScintillationProcess->IsApplicable(*particle)) {
+      pmanager->AddProcess(fScintillationProcess);
+      pmanager->SetProcessOrderingToLast(fScintillationProcess, idxAtRest);
+      pmanager->SetProcessOrderingToLast(fScintillationProcess, idxPostStep);
+    }
     if (particleName == "opticalphoton") {
       G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
+      pmanager->AddDiscreteProcess(fAbsorptionProcess);
+      pmanager->AddDiscreteProcess(fRayleighScatteringProcess);
+      pmanager->AddDiscreteProcess(fMieHGScatteringProcess);
       pmanager->AddDiscreteProcess(fBoundaryProcess);
     }
   }

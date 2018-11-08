@@ -1,8 +1,6 @@
-/customize/geometry/setOpeningAngle  0.5 radian
+/customize/geometry/setOpeningAngle  0.05 radian
 /customize/geometry/setInnerDiameter 30 cm
-/customize/geometry/setOuterDiameter 80 cm
-/customize/geometry/setHeight        50 cm
+/customize/geometry/setOuterDiameter 35 cm
+/customize/geometry/setHeight        2 cm
 
-/run/initialize
-/run/beamOn 1
 

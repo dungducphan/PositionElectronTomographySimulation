@@ -23,38 +23,48 @@ class G4LogicalVolume;
 
 class PETDetectorConstruction : public G4VUserDetectorConstruction {
 public:
-    PETDetectorConstruction();
-    virtual ~PETDetectorConstruction();
-    virtual G4VPhysicalVolume *Construct();
-    virtual void BuildMaterial();
+  PETDetectorConstruction();
 
-    // set methods
-    void SetOpeningAngle(G4double newValue);
-    void SetInnerDiameter(G4double newValue);
-    void SetOuterDiameter(G4double newValue);
-    void SetHeight(G4double newValue);
+  virtual ~PETDetectorConstruction();
+
+  virtual G4VPhysicalVolume *Construct();
+
+  virtual void BuildMaterial();
+
+  // set methods
+  void SetOpeningAngle(G4double newValue);
+
+  void SetInnerDiameter(G4double newValue);
+
+  void SetOuterDiameter(G4double newValue);
+
+  void SetHeight(G4double newValue);
 
 private:
-    G4double fOpeningAngle;
-    G4double fInnerDiameter;
-    G4double fOuterDiameter;
-    G4double fHeight;
+  G4double fOpeningAngle;
+  G4double fInnerDiameter;
+  G4double fOuterDiameter;
+  G4double fHeight;
 
-    G4double world_hx;
-    G4double world_hy;
-    G4double world_hz;
-    G4Box *worldBox;
-    G4LogicalVolume *worldLog;
-    G4VPhysicalVolume* worldPhy;
+  G4double world_hx;
+  G4double world_hy;
+  G4double world_hz;
+  G4Box *worldBox;
+  G4LogicalVolume *worldLog;
+  G4VPhysicalVolume *worldPhy;
 
-    G4Tubs *sCrystal_Mod;
-    G4LogicalVolume *sCrystal_Log;
+  G4Tubs *sCrystal_Mod;
+  G4LogicalVolume *sCrystal_Log;
   G4VPhysicalVolume *sCrystal_Phy;
 
-    G4Material *fAir;
-    G4Material *fLAr;
+  G4Material *fAir;
+  G4Material *fLYSO;
+  G4Material *fLutetiumOxide;
+  G4Material *fYttriumOxide;
+  G4Material *fSiliconDioxide;
+  G4MaterialPropertiesTable *fLYSO_MPT;
 
-    PETDetectorMessenger *fMessenger;
+  PETDetectorMessenger *fMessenger;
 };
 
 #endif

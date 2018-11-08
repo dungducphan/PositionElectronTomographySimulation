@@ -6,10 +6,10 @@ PETPrimaryGeneratorAction::PETPrimaryGeneratorAction() : G4VUserPrimaryGenerator
   fParticleGun = new G4ParticleGun(n_particle);
   G4ParticleTable * particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition *particle = particleTable->FindParticle(particleName = "e-");
+  G4ParticleDefinition *particle = particleTable->FindParticle(particleName = "gamma");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0.2, 0.));
-  fParticleGun->SetParticleEnergy(100. * MeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0.02, 0.));
+  fParticleGun->SetParticleEnergy(0.511 * MeV);
 }
 
 PETPrimaryGeneratorAction::~PETPrimaryGeneratorAction() {
