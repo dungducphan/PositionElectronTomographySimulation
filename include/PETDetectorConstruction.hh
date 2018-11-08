@@ -1,5 +1,5 @@
-#ifndef LSDetectorConstruction_h
-#define LSDetectorConstruction_h 1
+#ifndef PETDetectorConstruction_h
+#define PETDetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4RunManager.hh"
@@ -49,11 +49,10 @@ private:
 
     G4Tubs *sCrystal_Mod;
     G4LogicalVolume *sCrystal_Log;
+  G4VPhysicalVolume *sCrystal_Phy;
 
     G4Material *fAir;
     G4Material *fLAr;
-    G4Material *fAl;
-    G4MaterialPropertiesTable *fLAr_mt;
 
     PETDetectorMessenger *fMessenger;
 };

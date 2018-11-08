@@ -8,7 +8,7 @@ project(PETSim)
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
 # to build a batch mode only executable
 #
-set(Geant4_DIR /home/dphan/Geant4/install/lib/Geant4-10.4.1/)
+# set(Geant4_DIR /home/dphan/Geant4/install/lib/Geant4-10.4.1/)
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
 if(WITH_GEANT4_UIVIS)
   find_package(Geant4 REQUIRED ui_all vis_all)

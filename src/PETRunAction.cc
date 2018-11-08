@@ -1,13 +1,13 @@
 #include "PETRunAction.hh"
 
-LSRunAction::LSRunAction() : G4UserRunAction() {
+PETRunAction::PETRunAction() : G4UserRunAction() {
 }
 
-LSRunAction::~LSRunAction() {
+PETRunAction::~PETRunAction() {
 }
 
-void LSRunAction::BeginOfRunAction(const G4Run * run) {
+void PETRunAction::BeginOfRunAction(const G4Run *run) {
 }
 
-void LSRunAction::EndOfRunAction(const G4Run * run) {
+void PETRunAction::EndOfRunAction(const G4Run *run) {
 }

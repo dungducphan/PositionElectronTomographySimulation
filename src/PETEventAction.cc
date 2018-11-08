@@ -1,13 +1,13 @@
 #include "PETEventAction.hh"
 
-LSEventAction::LSEventAction(LSRunAction * runAction) : G4UserEventAction() {
+PETEventAction::PETEventAction(PETRunAction *runAction) : G4UserEventAction() {
 }
 
-LSEventAction::~LSEventAction() {
+PETEventAction::~PETEventAction() {
 }
 
-void LSEventAction::BeginOfEventAction(const G4Event * event) {
+void PETEventAction::BeginOfEventAction(const G4Event *event) {
 }
 
-void LSEventAction::EndOfEventAction(const G4Event * event) {
+void PETEventAction::EndOfEventAction(const G4Event *event) {
 }

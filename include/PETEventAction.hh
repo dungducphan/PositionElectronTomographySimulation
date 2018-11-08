@@ -1,5 +1,5 @@
-#ifndef LSEventAction_h
-#define LSEventAction_h 1
+#ifndef PETEventAction_h
+#define PETEventAction_h 1
 
 #include "PETRunAction.hh"
 
@@ -8,18 +8,19 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class LSRunAction;
+class PETRunAction;
 
-class LSEventAction : public G4UserEventAction {
+class PETEventAction : public G4UserEventAction {
 public:
-  LSEventAction(LSRunAction* runAction);
-  virtual ~LSEventAction();
+  PETEventAction(PETRunAction *runAction);
+
+  virtual ~PETEventAction();
 
   virtual void BeginOfEventAction(const G4Event* event);
   virtual void EndOfEventAction(const G4Event* event);
 
 private:
-  LSRunAction* fRunAction;
+  PETRunAction *fRunAction;
 };
 
 #endif

@@ -2,8 +2,8 @@
 // Created by dphan on 11/8/18.
 //
 
-#ifndef PETSIM_PETDETECTORMESSENGER_HH
-#define PETSIM_PETDETECTORMESSENGER_HH
+#ifndef PETDETECTORMESSENGER_HH
+#define PETDETECTORMESSENGER_HH
 
 #include "G4UImessenger.hh"
 #include "globals.hh"

@@ -18,10 +18,11 @@ class G4ParticleGun;
 class G4Event;
 class G4Box;
 
-class LSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class PETPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 public:
-  LSPrimaryGeneratorAction();
-  virtual ~LSPrimaryGeneratorAction();
+  PETPrimaryGeneratorAction();
+
+  virtual ~PETPrimaryGeneratorAction();
 
   // method from the base class
   virtual void GeneratePrimaries(G4Event*);

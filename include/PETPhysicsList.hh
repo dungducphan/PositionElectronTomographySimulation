@@ -1,18 +1,37 @@
-#ifndef LSPhysicsList_h
-#define LSPhysicsList_h 1
+#ifndef PETPhysicsList_h
+#define PETPhysicsList_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VUserPhysicsList.hh"
+#include "G4Cerenkov.hh"
+#include "G4OpBoundaryProcess.hh"
 
-#include "G4DecayPhysics.hh"
-#include "G4RadioactiveDecayPhysics.hh"
-#include "G4EmStandardPhysics.hh"
+class G4Cerenkov;
 
-class LSPhysicsList: public G4VModularPhysicsList {
+class G4OpBoundaryProcess;
+
+class PETPhysicsList : public G4VUserPhysicsList {
 public:
-  LSPhysicsList();
-  virtual ~LSPhysicsList();
+  PETPhysicsList();
+
+  virtual ~PETPhysicsList();
+
+  virtual void ConstructParticle();
+
+  virtual void ConstructProcess();
+
+  virtual void ConstructOp();
+
+  virtual void ConstructDecay();
+
+  virtual void ConstructEM();
 
   virtual void SetCuts();
+
+private:
+  static G4ThreadLocal G4int fVerboseLevel;
+  static G4ThreadLocal G4int fMaxNumPhotonStep;
+  static G4ThreadLocal G4Cerenkov *fCerenkovProcess;
+  static G4ThreadLocal G4OpBoundaryProcess *fBoundaryProcess;
 };
 
 #endif

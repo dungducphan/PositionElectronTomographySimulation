@@ -1,6 +1,3 @@
-
-#include <PETDetectorConstruction.hh>
-
 #include "PETDetectorConstruction.hh"
 #include "PETDetectorMessenger.hh"
 
@@ -35,11 +32,8 @@ void PETDetectorConstruction::BuildMaterial() {
   // Air
   fAir = nist->FindOrBuildMaterial("G4_AIR");
 
-  // Aluminum
-  fAl = nist->FindOrBuildMaterial("G4_Al");
-
   // Liquid Argon (Properties data taken from LArSOFT)
-  fLAr = new G4Material("LiquidArgon",z = 18., a = 39.948 * g/mole, density = 1.3954 * g/cm3);
+  fLAr = new G4Material("LiquidArgon", z = 18., a = 39.948 * g / mole, density = 1.3954 * g / cm3);
 }
 
 G4VPhysicalVolume * PETDetectorConstruction::Construct() {
@@ -69,7 +63,7 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
   worldLog = new G4LogicalVolume(worldBox, fAir, "WorldLog");
 
 
-  G4VPhysicalVolume* sCrystal_Phy = new G4PVPlacement(0, G4ThreeVector(), sCrystal_Log, "SingleCrystalPhysicalVolume", worldLog, false, 0);
+  sCrystal_Phy = new G4PVPlacement(0, G4ThreeVector(), sCrystal_Log, "SingleCrystalPhysicalVolume", worldLog, false, 0);
   worldPhy = new G4PVPlacement(0, G4ThreeVector(), worldLog, "WorldPhy", 0, false, 0, checkOverlaps);
 
   return worldPhy;

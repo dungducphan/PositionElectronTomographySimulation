@@ -1,5 +1,5 @@
-#ifndef LSActionInitialization_h
-#define LSActionInitialization_h 1
+#ifndef PETActionInitialization_h
+#define PETActionInitialization_h 1
 
 #include "PETPrimaryGeneratorAction.hh"
 #include "PETEventAction.hh"
@@ -7,10 +7,11 @@
 
 #include "G4VUserActionInitialization.hh"
 
-class LSActionInitialization : public G4VUserActionInitialization {
+class PETActionInitialization : public G4VUserActionInitialization {
 public:
-  LSActionInitialization();
-  virtual ~LSActionInitialization();
+  PETActionInitialization();
+
+  virtual ~PETActionInitialization();
 
   virtual void Build() const;
 };

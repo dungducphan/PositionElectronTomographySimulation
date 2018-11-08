@@ -1,19 +1,17 @@
 #include "PETActionInitialization.hh"
 
-LSActionInitialization::LSActionInitialization() : G4VUserActionInitialization() {
+PETActionInitialization::PETActionInitialization() : G4VUserActionInitialization() {
 }
 
-LSActionInitialization::~LSActionInitialization() {
+PETActionInitialization::~PETActionInitialization() {
 }
 
-void LSActionInitialization::Build() const {
-  SetUserAction(new LSPrimaryGeneratorAction);
+void PETActionInitialization::Build() const {
+  SetUserAction(new PETPrimaryGeneratorAction);
 
-  LSRunAction* runAction = new LSRunAction();
+  PETRunAction *runAction = new PETRunAction();
   SetUserAction(runAction);
 
-  LSEventAction* eventAction = new LSEventAction(runAction);
+  PETEventAction *eventAction = new PETEventAction(runAction);
   SetUserAction(eventAction);
-
-  //SetUserAction(new LSSteppingAction(eventAction));
 }
