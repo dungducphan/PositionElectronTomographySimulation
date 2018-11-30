@@ -1,10 +1,21 @@
 #include "PETDetectorConstruction.hh"
 #include "PETDetectorMessenger.hh"
+#include "PETTrackerSD.hh"
 
+#include "G4SDManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4OpticalSurface.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
 #include "G4GeometryManager.hh"
+#include "G4VisAttributes.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 PETDetectorConstruction::PETDetectorConstruction()
 : G4VUserDetectorConstruction(),
@@ -129,6 +140,22 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
     fHeight*0.5,
     0,
     fOpeningAngle);
+
+  sDet_Mod = new G4Tubs(
+    "detector",
+    fOuterDiameter,
+    fOuterDiameter+0.2,
+    fHeight*0.5,
+    0,
+    fOpeningAngle);
+  
+
+
+
+  detectorLog = new G4LogicalVolume(sDet_Mod, fLYSO, "DetectorLog", 0, 0, 0);
+    
+			
+			
   sCrystal_Log = new G4LogicalVolume(sCrystal_Mod, fLYSO, "SingleCrystalLogicalVolume", 0, 0, 0);
 
   worldBox = new G4Box("WorldBox", world_hx, world_hy, world_hz);
@@ -136,7 +163,35 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
 
 
   sCrystal_Phy = new G4PVPlacement(0, G4ThreeVector(), sCrystal_Log, "SingleCrystalPhysicalVolume", worldLog, false, 0);
+  detectorPhy = new G4PVPlacement(0, G4ThreeVector(), detectorLog, "DetectorPhy", worldLog, false, 0);
   worldPhy = new G4PVPlacement(0, G4ThreeVector(), worldLog, "WorldPhy", 0, false, 0, checkOverlaps);
+
+  G4VisAttributes* crystVisAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  G4VisAttributes* SiPMVisAttributes = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+
+  sCrystal_Log->SetVisAttributes(crystVisAttributes);
+  detectorLog->SetVisAttributes(SiPMVisAttributes);
+
+
+
+  G4OpticalSurface* opDetectorSurface = new G4OpticalSurface("DetectorSurface");
+  opDetectorSurface->SetType(dielectric_metal);
+  opDetectorSurface->SetFinish(ground);
+  opDetectorSurface->SetModel(glisur);
+  G4LogicalSkinSurface* detectorSurface = new G4LogicalSkinSurface("DetectorSurface", detectorLog, opDetectorSurface);
+
+
+  G4double ephoton_pmt[4]      = {0.0001*eV, 1*eV, 10*eV, 100*eV};
+  G4double reflectivity_pmt[4] = {0,0,0,0};
+  G4double efficiency_pmt[4]   = {1.0,1.0,1.0,1.0};
+
+  G4MaterialPropertiesTable *detectorMPT = new G4MaterialPropertiesTable();
+  detectorMPT->AddProperty("REFLECTIVITY", ephoton_pmt, reflectivity_pmt, 4);
+  detectorMPT->AddProperty("EFFICIENCY",   ephoton_pmt, efficiency_pmt,   4);
+  opDetectorSurface->SetMaterialPropertiesTable(detectorMPT);
+
+  
+
 
   return worldPhy;
 }
@@ -159,5 +214,17 @@ void PETDetectorConstruction::SetOuterDiameter(G4double newValue) {
 void PETDetectorConstruction::SetHeight(G4double newValue) {
     this->fHeight = newValue;
     G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+}
+
+
+
+void PETDetectorConstruction::ConstructSDandField() {
+  // Sensitive detectors
+
+  PETTrackerSD* aTrackerSD = new PETTrackerSD("TrackerChamberSD");
+  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
+
+  // Setting aTrackerSD to all logical volumes with the same name of "Chamber_LV".
+  SetSensitiveDetector("DetectorLog", aTrackerSD, true);
 }
 

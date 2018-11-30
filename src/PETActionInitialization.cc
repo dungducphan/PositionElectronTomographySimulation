@@ -1,17 +1,33 @@
 #include "PETActionInitialization.hh"
+#include "PETDetectorConstruction.hh"
 
-PETActionInitialization::PETActionInitialization() : G4VUserActionInitialization() {
+#include "PETPrimaryGeneratorAction.hh"
+#include "PETRunAction.hh"
+#include "PETEventAction.hh"
+#include "PETSteppingAction.hh"
+
+
+
+PETActionInitialization::PETActionInitialization(PETDetectorConstruction* det)
+  : G4VUserActionInitialization(),
+    fDetector(det) {
 }
 
 PETActionInitialization::~PETActionInitialization() {
 }
 
-void PETActionInitialization::Build() const {
-  SetUserAction(new PETPrimaryGeneratorAction);
+void PETActionInitialization::BuildForMaster() const{
+  SetUserAction(new PETRunAction());
+}
 
-  PETRunAction *runAction = new PETRunAction();
+void PETActionInitialization::Build() const {
+  SetUserAction(new PETPrimaryGeneratorAction());
+
+  PETRunAction* runAction = new PETRunAction();
   SetUserAction(runAction);
 
-  PETEventAction *eventAction = new PETEventAction(runAction);
+  PETEventAction* eventAction = new PETEventAction(runAction);
   SetUserAction(eventAction);
+
+  SetUserAction(new PETSteppingAction(fDetector));
 }

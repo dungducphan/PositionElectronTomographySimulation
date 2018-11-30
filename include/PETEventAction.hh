@@ -21,6 +21,8 @@ public:
 
 private:
   PETRunAction *fRunAction;
+
+  G4int fMPPCCollID;
 };
 
 #endif

@@ -31,6 +31,8 @@ public:
 
   virtual void BuildMaterial();
 
+  virtual void ConstructSDandField();
+
   // set methods
   void SetOpeningAngle(G4double newValue);
 
@@ -54,8 +56,11 @@ private:
   G4VPhysicalVolume *worldPhy;
 
   G4Tubs *sCrystal_Mod;
+  G4Tubs *sDet_Mod;
   G4LogicalVolume *sCrystal_Log;
+  G4LogicalVolume *detectorLog;
   G4VPhysicalVolume *sCrystal_Phy;
+  G4VPhysicalVolume *detectorPhy;
 
   G4Material *fAir;
   G4Material *fLYSO;

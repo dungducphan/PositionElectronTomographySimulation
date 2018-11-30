@@ -20,11 +20,13 @@
 int main(int argc, char ** argv) {
   G4RunManager * runManager = new G4RunManager;
 
-  runManager->SetUserInitialization(new PETDetectorConstruction());
+  PETDetectorConstruction* detector = new PETDetectorConstruction();
+
+  runManager->SetUserInitialization(detector);
 
   runManager->SetUserInitialization(new PETPhysicsList());
 
-  runManager->SetUserInitialization(new PETActionInitialization());
+  runManager->SetUserInitialization(new PETActionInitialization(detector));
 
 #ifdef G4VIS_USE
     G4VisManager * visManager = new G4VisExecutive;

@@ -16,11 +16,15 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+find_package(ROOT CONFIG REQUIRED)
+
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
 #
 include(${Geant4_USE_FILE})
+include(${ROOT_USE_FILE})
+
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -35,7 +39,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(PETSim PETmain.cc ${sources} ${headers})
-target_link_libraries(PETSim ${Geant4_LIBRARIES})
+target_link_libraries(PETSim ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} Core Tree)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -46,6 +50,7 @@ set(PETSim_SCRIPTS
   vis.mac
   gui.mac
   geom.in
+  Dung.mac
   )
 
 foreach(_script ${PETSim_SCRIPTS})
