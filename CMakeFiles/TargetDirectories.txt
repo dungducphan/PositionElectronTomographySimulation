@@ -1,7 +1,0 @@
-/home/bifox/research/geant4/PositionElectronTomographySimulation/CMakeFiles/install/strip.dir
-/home/bifox/research/geant4/PositionElectronTomographySimulation/CMakeFiles/edit_cache.dir
-/home/bifox/research/geant4/PositionElectronTomographySimulation/CMakeFiles/PETSim.dir
-/home/bifox/research/geant4/PositionElectronTomographySimulation/CMakeFiles/rebuild_cache.dir
-/home/bifox/research/geant4/PositionElectronTomographySimulation/CMakeFiles/list_install_components.dir
-/home/bifox/research/geant4/PositionElectronTomographySimulation/CMakeFiles/install/local.dir
-/home/bifox/research/geant4/PositionElectronTomographySimulation/CMakeFiles/install.dir
