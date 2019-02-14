@@ -24,7 +24,7 @@ public:
 
   virtual void UserSteppingAction(const G4Step*);
 
-
+  virtual void FIllStepTree(G4double vtx_x, G4double vtx_y, G4double vtx_z, G4double wavelength2);
 
 
 
@@ -34,6 +34,12 @@ private:
   PETRunAction *fRunAction;
 
 
+  TFile* outputFilename;
+  TTree* stepTree;
+  G4double vtx_x;
+  G4double vtx_y;
+  G4double vtx_z;
+  G4double wavelength2;
 };
 
 

@@ -1,7 +1,7 @@
 #include "PETEventAction.hh"
 #include "PETRunAction.hh"
 #include "PETTrackerHit.hh"
-
+#include "PETSteppingaction.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

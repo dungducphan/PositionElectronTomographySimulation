@@ -63,7 +63,7 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
 
   
   //Recording data for start
-  if (theTrack->GetParentID()!=0) {
+  //if (theTrack->GetParentID()!=0) {
     if(theTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
       //This is a primary track
       if ( theTrack->GetCurrentStepNumber() == 1 ) {
@@ -81,7 +81,7 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
 	myfile.close();
       }
     }
-  }
+    //}
   
 
 
