@@ -3,6 +3,7 @@
 
 #include "PETPrimaryGeneratorAction.hh"
 #include "PETRunAction.hh"
+#include "PETStackingAction.hh"
 #include "PETEventAction.hh"
 #include "PETSteppingAction.hh"
 
@@ -28,6 +29,8 @@ void PETActionInitialization::Build() const {
 
   PETEventAction* eventAction = new PETEventAction(runAction);
   SetUserAction(eventAction);
+
+  SetUserAction(new PETStackingAction(runAction));
 
   SetUserAction(new PETSteppingAction(fDetector));
 }
