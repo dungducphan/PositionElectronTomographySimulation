@@ -7,6 +7,7 @@
 
 #include "G4UserSteppingAction.hh"
 #include "PETRunAction.hh"
+#include "G4LogicalVolume.hh"
 
 #include "TTree.h"
 #include "TBranch.h"
@@ -14,6 +15,7 @@
 class G4Track;
 class G4StepPoint;
 class G4OpBoundaryProcess;
+
 
 class PETDetectorConstruction;
 
@@ -32,6 +34,8 @@ private:
   G4OpBoundaryProcess* fOpProcess;
   PETDetectorConstruction* fDetector;
   PETRunAction *fRunAction;
+  G4LogicalVolume *sCrystal_Log;
+
 
 
 };

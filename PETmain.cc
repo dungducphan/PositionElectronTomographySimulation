@@ -7,6 +7,7 @@
 #include "PETPhysicsList.hh"
 #include "PETActionInitialization.hh"
 
+
 #include "QGSP_BIC_HP.hh"
 
 #ifdef G4VIS_USE
@@ -19,14 +20,18 @@
 
 int main(int argc, char ** argv) {
   G4RunManager * runManager = new G4RunManager;
-
+  
   PETDetectorConstruction* detector = new PETDetectorConstruction();
+
 
   runManager->SetUserInitialization(detector);
 
   runManager->SetUserInitialization(new PETPhysicsList());
 
   runManager->SetUserInitialization(new PETActionInitialization(detector));
+
+
+
 
 #ifdef G4VIS_USE
     G4VisManager * visManager = new G4VisExecutive;

@@ -45,6 +45,8 @@ void PETDetectorConstruction::BuildMaterial() {
   G4Element *Lutetium = nist->FindOrBuildElement("Lu");
   G4Element *Yttrium = nist->FindOrBuildElement("Y");
 
+  G4Element *fTeflon = nist->FindOrBuildElement("Teflon");
+
   // Air
   fAir = nist->FindOrBuildMaterial("G4_AIR");
 
@@ -122,6 +124,7 @@ void PETDetectorConstruction::BuildMaterial() {
   fLYSO_MPT = new G4MaterialPropertiesTable();
   fAir_MPT = new G4MaterialPropertiesTable();
 
+
   fLYSO_MPT->AddProperty("FASTCOMPONENT", ene, fast, num)->SetSpline(true);
   fLYSO_MPT->AddProperty("RINDEX", ene, rLyso, num);
   fLYSO_MPT->AddProperty("ABSLENGTH", ene, abs, num);
@@ -131,8 +134,10 @@ void PETDetectorConstruction::BuildMaterial() {
 
   fAir_MPT->AddProperty("RINDEX", ene, rAir, num);
 
+
   fLYSO->SetMaterialPropertiesTable(fLYSO_MPT);
   fAir->SetMaterialPropertiesTable(fAir_MPT);
+
 }
 
 G4VPhysicalVolume * PETDetectorConstruction::Construct() {
@@ -149,44 +154,55 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
       G4SolidStore::GetInstance()->Clean();
   }
 
-  sCrystal_Mod = new G4Tubs(
-    "SingleCrystalModel",
-    fInnerDiameter,
-    fOuterDiameter,
-    fHeight*0.5,
-    0,
-    fOpeningAngle);
+  // sCrystal_Mod = new G4Tubs(
+  //   "SingleCrystalModel",
+  //   fInnerDiameter,
+  //   fOuterDiameter,
+  //   fHeight*0.5,
+  //   0,
+  //   fOpeningAngle);
 
-  sDet_Mod = new G4Tubs(
-    "detector",
-    fOuterDiameter,
-    fOuterDiameter+0.2,
-    fHeight*0.5,
-    0,
-    fOpeningAngle);
-  
+  // sDet_Mod = new G4Tubs(
+  //   "detector",
+  //   fOuterDiameter,
+  //   fOuterDiameter+0.2,
+  //   fHeight*0.5,
+  //   0,
+  //   fOpeningAngle);
 
+  G4double thickness = 50*mm/2;
+  G4double width = 26.7*mm/2;
+  G4double height = 27.7*mm/2;
+  sCrystal_Mod = new G4Box("SingleCrystalModel", height, width,thickness);
+  sDet_Mod = new G4Box("detector", height, width, 1*mm);
+  //  sTop_Wrap = new G4Box("topwrap", 1*mm, width, thickness);
+  //sTeflon_Mod_Bot = new G4Box("teflon", 27.2*mm/2, 1*mm, thickness);
+  //  sTeflon_Mod_Left = new G4Box("teflon", 27.2*mm/2, 1*mm, thickness);
+  //sTeflon_Mod_Right = new G4Box("teflon", 27.2*mm/2, 1*mm, thickness);
 
 
   detectorLog = new G4LogicalVolume(sDet_Mod, fLYSO, "DetectorLog", 0, 0, 0);
     
-			
-			
   sCrystal_Log = new G4LogicalVolume(sCrystal_Mod, fLYSO, "SingleCrystalLogicalVolume", 0, 0, 0);
+
+  //wrapLog = new G4LogicalVolume(sTop_Wrap, fTeflon, "TopWrapLog", 0, 0, 0);
 
   worldBox = new G4Box("WorldBox", world_hx, world_hy, world_hz);
   worldLog = new G4LogicalVolume(worldBox, fAir, "WorldLog");
 
 
-  sCrystal_Phy = new G4PVPlacement(0, G4ThreeVector(), sCrystal_Log, "SingleCrystalPhysicalVolume", worldLog, false, 0);
-  detectorPhy = new G4PVPlacement(0, G4ThreeVector(), detectorLog, "DetectorPhy", worldLog, false, 0);
+  sCrystal_Phy = new G4PVPlacement(0, G4ThreeVector(0,0,0), sCrystal_Log, "SingleCrystalPhysicalVolume", worldLog, false, 0);
+  //sTop_Wrap_Phy = new G4PVPlacement(0, G4ThreeVector(height+2*mm,0,0), wrapLog, "TopWrapPhy", worldLog, false, 0);
+  detectorPhy = new G4PVPlacement(0, G4ThreeVector(0,0,thickness+1*mm), detectorLog, "DetectorPhy", worldLog, false, 0);
   worldPhy = new G4PVPlacement(0, G4ThreeVector(), worldLog, "WorldPhy", 0, false, 0, checkOverlaps);
 
   G4VisAttributes* crystVisAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   G4VisAttributes* SiPMVisAttributes = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  //  G4VisAttributes* teflonVisAttributes = new G4VisAttributes(G4Colour(1.0, 1.0, 0));
 
   sCrystal_Log->SetVisAttributes(crystVisAttributes);
   detectorLog->SetVisAttributes(SiPMVisAttributes);
+  //  wrapLog->SetVisAttributes(teflonVisAttributes);
 
 
 
@@ -205,6 +221,11 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
   detectorMPT->AddProperty("REFLECTIVITY", ephoton_pmt, reflectivity_pmt, 4);
   detectorMPT->AddProperty("EFFICIENCY",   ephoton_pmt, efficiency_pmt,   4);
   opDetectorSurface->SetMaterialPropertiesTable(detectorMPT);
+
+  // G4double ephoton_teflon[4]      = {0.0001*eV, 1*eV, 10*eV, 100*eV};
+  // G4double reflectivity_teflon[4] = {1.0,1.0,1.0,1.0};
+  // G4double efficiency_teflon[4]   = {1.0,1.0,1.0,1.0};
+
 
   
 

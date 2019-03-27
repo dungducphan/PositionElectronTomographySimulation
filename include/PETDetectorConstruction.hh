@@ -55,20 +55,25 @@ private:
   G4LogicalVolume *worldLog;
   G4VPhysicalVolume *worldPhy;
 
-  G4Tubs *sCrystal_Mod;
-  G4Tubs *sDet_Mod;
+  G4Box *sCrystal_Mod;
+  G4Box *sDet_Mod;
+  G4Box *sTop_Wrap;
   G4LogicalVolume *sCrystal_Log;
   G4LogicalVolume *detectorLog;
+  G4LogicalVolume *wrapLog;
   G4VPhysicalVolume *sCrystal_Phy;
   G4VPhysicalVolume *detectorPhy;
+  G4VPhysicalVolume *sTop_Wrap_Phy;
 
   G4Material *fAir;
   G4Material *fLYSO;
+  G4Material *fTeflon;
   G4Material *fLutetiumOxide;
   G4Material *fYttriumOxide;
   G4Material *fSiliconDioxide;
   G4MaterialPropertiesTable *fLYSO_MPT;
   G4MaterialPropertiesTable *fAir_MPT;
+  G4MaterialPropertiesTable *fTeflon_MPT;
 
   PETDetectorMessenger *fMessenger;
 };

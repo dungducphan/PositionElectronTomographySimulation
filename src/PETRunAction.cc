@@ -12,13 +12,19 @@ void PETRunAction::BeginOfRunAction(const G4Run *run) {
 
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
-  outputFilename = new TFile("first_try.root", "RECREATE");
+  outputFilename = new TFile("gammaenergy.root", "RECREATE");
   eventTree = new TTree("HitTree", "Hit Statistics");
   eventTree->Branch("eventHit", &eventHit, "eventHit/I");
+  eventTree->Branch("energy", &energy, "energy/D");
   eventTree->Branch("wavelengthHit", &wavelengthHit, "wavelengthHit/D");
   eventTree->Branch("posx", &posx, "posx/D");
   eventTree->Branch("posy", &posy, "posy/D");
   eventTree->Branch("posz", &posz, "posz/D");
+  gammaTree = new TTree("Gamma", "Event Statistics");
+  gammaTree->Branch("sec_x", &sec_x, "sec_x/D");
+  gammaTree->Branch("sec_y", &sec_y, "sec_y/D");
+  gammaTree->Branch("sec_z", &sec_z, "sec_z/D");
+  gammaTree->Branch("both_energy", &both_energy, "both_energy/D");
 
   //eventHit = 0;
 
@@ -57,13 +63,23 @@ void PETRunAction::EndOfRunAction(const G4Run *run) {
   // }
 }
 
-  void PETRunAction::FillEventHitTree(G4int NumberOfHitInAnEvent, G4double wavelengthOfPhotonHit, G4double Pos_x, G4double Pos_y, G4double Pos_z) {
+void PETRunAction::FillEventHitTree(G4int NumberOfHitInAnEvent, G4double EnergyOfPhoton,G4double wavelengthOfPhotonHit, G4double Pos_x, G4double Pos_y, G4double Pos_z) {
   eventHit = NumberOfHitInAnEvent;
+  energy = EnergyOfPhoton;
   wavelengthHit = wavelengthOfPhotonHit;
   posx = Pos_x;
   posy = Pos_y;
   posz = Pos_z;
   eventTree->Fill();
+}
+
+
+void PETRunAction::Gamma(G4double Sec_x, G4double Sec_y, G4double Sec_z, G4double Sec_energy){
+  sec_x = Sec_x;
+  sec_y = Sec_y;
+  sec_z = Sec_z;
+  both_energy = Sec_energy;
+  gammaTree->Fill();
 }
 
 
