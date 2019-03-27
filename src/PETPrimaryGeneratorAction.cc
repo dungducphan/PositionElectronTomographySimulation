@@ -8,7 +8,7 @@ PETPrimaryGeneratorAction::PETPrimaryGeneratorAction() : G4VUserPrimaryGenerator
   G4String particleName;
   G4ParticleDefinition *particle = particleTable->FindParticle(particleName = "gamma");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0.02, 0.));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
   fParticleGun->SetParticleEnergy(0.511 * MeV);
 }
 
@@ -19,7 +19,7 @@ PETPrimaryGeneratorAction::~PETPrimaryGeneratorAction() {
 void PETPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   G4double x0 = 0 * m;
   G4double y0 = 0 * m;
-  G4double z0 = 0 * m;
+  G4double z0 = -0.1 * m;
 
   fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
   fParticleGun->GeneratePrimaryVertex(anEvent);
