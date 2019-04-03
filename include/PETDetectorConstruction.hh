@@ -57,7 +57,6 @@ private:
 
   G4Box *sCrystal_Mod;
   G4Box *sDet_Mod;
-  G4Box *sTop_Wrap;
   G4LogicalVolume *sCrystal_Log;
   G4LogicalVolume *detectorLog;
   G4LogicalVolume *wrapLog;

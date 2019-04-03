@@ -44,7 +44,6 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   G4Track* theTrack = theStep->GetTrack();
 
   G4int EventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
-
   
   G4String CPName;
   G4double Secondary_Energy;
@@ -54,29 +53,27 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   G4int ParentID;
   G4int Step_Number = theTrack->GetCurrentStepNumber();
   
-
-
   
   //  if(theTrack->GetCreatorProcess()!=0){
-  if(theTrack->GetParentID()==0){
+  //  if(theTrack->GetParentID()==0){
     //if(theTrack->GetCreatorProcess()->GetProcessName()=="compt"){
     //      if(Step_Number == 2){
     //CPName = theTrack->GetCreatorProcess()->GetProcessName();
-    G4double Energy_Loss = theStep->GetDeltaEnergy();
-    G4double Energy_Gamma = theTrack->GetTotalEnergy();
+    //G4double Energy_Loss = theStep->GetDeltaEnergy();
+    //G4double Energy_Gamma = theTrack->GetTotalEnergy();
     //Secondary_Energy = theTrack->GetKineticEnergy()/keV;
     //ParentID = theTrack->GetParentID();
-    G4double x  = theTrack->GetPosition().x();//GetVertexPosition().x();
-    G4double y  = theTrack->GetPosition().y();//GetVertexPosition().y();
-    G4double z  = theTrack->GetPosition().z();//GetVertexPosition().z();
+    //G4double x  = theTrack->GetPosition().x();//GetVertexPosition().x();
+    //G4double y  = theTrack->GetPosition().y();//GetVertexPosition().y();
+    //G4double z  = theTrack->GetPosition().z();//GetVertexPosition().z();
     //if(Energy_Loss!=0){
-    std::cout<<Step_Number<< "\t" <<Energy_Loss<< "\t" << Energy_Gamma <<std::endl;
-    std::ofstream myfile("gamma_energy.txt", std::ios_base::app);
-    myfile << Step_Number  << "," << Energy_Loss << "," << Energy_Gamma << "," << x << "," << y << "," << z <<std::endl;
-    myfile.close();
+    //std::cout<<Step_Number<< "\t" <<Energy_Loss<< "\t" << Energy_Gamma <<std::endl;
+    //std::ofstream myfile("gamma_energy.txt", std::ios_base::app);
+    //myfile << Step_Number  << "," << Energy_Loss << "," << Energy_Gamma << "," << x << "," << y << "," << z <<std::endl;
+    //myfile.close();
     //}
     //}
-  }
+  //}
   //    }
   
   
@@ -96,74 +93,48 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   }
 
 
-  G4LogicalVolume* volume = theStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
-
-  // // if (theTrack->GetParentID() == 0){
-  // if (volume == sCrystal_Log){
-  //     G4double edepStep = theStep->GetTotalEnergyDeposit();
-  //     std::ofstream myfile("edep.txt", std::ios_base::app);
-  //     myfile << edepStep << "\n";
-  //     myfile.close();
-  //     // }
-  // }
-
-
-
+  if (thePostPVname == "detector"){
+    std::cout<<"CHEEEEEEEEEEAAAAAAAAAABBBBBOOOOOOOOOOOOYYYYYYY"<<std::endl;
+    theTrack->SetTrackStatus(fStopAndKill);
+  }
   
-  // //Recording data for start
-  // if (theTrack->GetParentID()!=0) {
-  //   if(theTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
-  //     //This is a primary track
-  //     if ( theTrack->GetCurrentStepNumber() == 1 ) {
-  // 	std::ofstream myfile("noclue.txt", std::ios_base::app);
-  // 	G4double x  = theTrack->GetVertexPosition().x();
-  // 	G4double y  = theTrack->GetVertexPosition().y();
-  // 	G4double z  = theTrack->GetVertexPosition().z();
-  // 	G4double pz = theTrack->GetVertexMomentumDirection().z();
-  // 	G4double energy2 = theTrack->GetTotalEnergy();
-  // 	G4double wavelength2 = 1242.38/ (energy2/eV);
-  // 	//std::cout<<"#######################################"<< std::endl;
-  // 	//std::cout<<wavelength2<<std::endl;
-  // 	myfile << wavelength2 << "\t";
-  // 	myfile.close();
-  //     }
-  //   }
-  // }
-  
-
-
+  // if (theTrack->GetParentID() > 0){
+  //   std::cout<<thePostPVname<<std::endl;   
+  // } 
+   
   // Retrieve the status of the photon
   G4OpBoundaryProcessStatus theStatus = Undefined;
   G4ProcessManager* OpManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
-
+  
   if (OpManager) {
     G4int MAXofPostStepLoops = OpManager->GetPostStepProcessVector()->entries();
     G4ProcessVector* fPostStepDoItVector = OpManager->GetPostStepProcessVector(typeDoIt);
-
+    
     for ( G4int i=0; i<MAXofPostStepLoops; i++) {
       G4VProcess* fCurrentProcess = (*fPostStepDoItVector)[i];
       fOpProcess = dynamic_cast<G4OpBoundaryProcess*>(fCurrentProcess);
       if (fOpProcess) { theStatus = fOpProcess->GetStatus(); break;}
     }
   }
-
-  switch (theStatus) {
+  
+  //  switch (theStatus) {
     // Detected by a detector
-    case Detection:
-      // Check if the photon hits the detector and process the hit if it does
-      if ( thePostPVname == "DetectorPhy" ) {
-        //std::cout << "Photon is detected." << std::endl;
-        G4SDManager* SDman = G4SDManager::GetSDMpointer();
-        G4String SDname="TrackerChamberSD";
-        PETTrackerSD* mppcSD = (PETTrackerSD*)SDman->FindSensitiveDetector(SDname);
-        if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
-        // Stop Tracking when it hits the detector's surface
-        theTrack->SetTrackStatus(fStopAndKill);
-        return;
-      }
-      break;
-
-    default: break;
+  //case Detection:
+    // Check if the photon hits the detector and process the hit if it does
+    //      if ( thePostPVname == "DetectorPhy" ) {
+  if (thePostPVname == "detector") {
+    std::cout << "Photon is detected." << std::endl;
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    G4String SDname="TrackerChamberSD";
+    PETTrackerSD* mppcSD = (PETTrackerSD*)SDman->FindSensitiveDetector(SDname);
+    if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
+    // Stop Tracking when it hits the detector's surface
+    theTrack->SetTrackStatus(fStopAndKill);
+    return;
   }
-
+  //break;
+  
+  //default: break;
+    //}
+  
 }

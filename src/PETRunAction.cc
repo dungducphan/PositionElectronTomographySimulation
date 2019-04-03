@@ -12,7 +12,7 @@ void PETRunAction::BeginOfRunAction(const G4Run *run) {
 
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
-  outputFilename = new TFile("gammaenergy.root", "RECREATE");
+  outputFilename = new TFile("second_try.root", "RECREATE");
   eventTree = new TTree("HitTree", "Hit Statistics");
   eventTree->Branch("eventHit", &eventHit, "eventHit/I");
   eventTree->Branch("energy", &energy, "energy/D");
@@ -20,11 +20,13 @@ void PETRunAction::BeginOfRunAction(const G4Run *run) {
   eventTree->Branch("posx", &posx, "posx/D");
   eventTree->Branch("posy", &posy, "posy/D");
   eventTree->Branch("posz", &posz, "posz/D");
-  gammaTree = new TTree("Gamma", "Event Statistics");
-  gammaTree->Branch("sec_x", &sec_x, "sec_x/D");
-  gammaTree->Branch("sec_y", &sec_y, "sec_y/D");
-  gammaTree->Branch("sec_z", &sec_z, "sec_z/D");
-  gammaTree->Branch("both_energy", &both_energy, "both_energy/D");
+  secTree = new TTree("SecondaryTree", "Event Statistics");
+  secTree->Branch("sec_x", &sec_x, "sec_x/D");
+  secTree->Branch("sec_y", &sec_y, "sec_y/D");
+  secTree->Branch("sec_z", &sec_z, "sec_z/D");
+  secTree->Branch("both_energy", &both_energy, "both_energy/D");
+  gammaTree = new TTree("GammaTree", "Gamma Stats");
+  gammaTree->Branch("GammaCount", &GammaCount, "GammaCount/I");
 
   //eventHit = 0;
 
@@ -74,13 +76,15 @@ void PETRunAction::FillEventHitTree(G4int NumberOfHitInAnEvent, G4double EnergyO
 }
 
 
-void PETRunAction::Gamma(G4double Sec_x, G4double Sec_y, G4double Sec_z, G4double Sec_energy){
+void PETRunAction::FillSecondaryTree(G4double Sec_x, G4double Sec_y, G4double Sec_z, G4double Sec_energy){
   sec_x = Sec_x;
   sec_y = Sec_y;
   sec_z = Sec_z;
   both_energy = Sec_energy;
-  gammaTree->Fill();
+  secTree->Fill();
 }
 
 
-
+void PETRunAction::FillGammaTree(G4int gammaCounter){
+  GammaCount = gammaCounter;
+}
