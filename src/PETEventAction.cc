@@ -44,7 +44,7 @@ void PETEventAction::EndOfEventAction(const G4Event *event) {
     if (fMPPCCollID>=0) mppcHC = (PETTrackerHitsCollection*)(HCE->GetHC(fMPPCCollID));
    }
   
-  std::cout<<mppcHC->entries()<<"mmpcHC entries" << std::endl;
+  //  std::cout<<mppcHC->entries()<<"mmpcHC entries" << std::endl;
 
   // Get hit information about photons that reached the detector in this event
   if (mppcHC) {
@@ -53,12 +53,14 @@ void PETEventAction::EndOfEventAction(const G4Event *event) {
     for (unsigned short int ihit = 0; ihit < n_hit; ihit++) {
       G4double energy = HitVector->at(ihit)->GetEnergy();
       G4ThreeVector photonArrive = HitVector->at(ihit)->GetArrivalPos();
+      G4double time = HitVector->at(ihit)->GetArrivalTime();
       G4double wavelength = 1242.38 / (energy/eV);
       G4double xpos = photonArrive.x();
       G4double ypos = photonArrive.y();
       G4double zpos = photonArrive.z();
-      fRunAction->FillEventHitTree(n_hit, energy, wavelength, xpos, ypos, zpos);
-      std::cout<<"Number of Hits =  " <<n_hit<<std::endl;
+      fRunAction->FillEventHitTree(n_hit, energy, wavelength, xpos, ypos, zpos, time);
+      
+      //      std::cout<<"Number of Hits =  " <<n_hit<<std::endl;
     }
   }
 

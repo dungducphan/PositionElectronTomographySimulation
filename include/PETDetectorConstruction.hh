@@ -55,6 +55,12 @@ private:
   G4LogicalVolume *worldLog;
   G4VPhysicalVolume *worldPhy;
 
+  G4Box *waterBox;
+  G4LogicalVolume *waterLog;
+  G4VPhysicalVolume *waterPhy;
+
+
+  
   G4Box *sCrystal_Mod;
   G4Box *sDet_Mod;
   G4LogicalVolume *sCrystal_Log;
@@ -65,6 +71,8 @@ private:
   G4VPhysicalVolume *sTop_Wrap_Phy;
 
   G4Material *fAir;
+  G4Material *fWater;
+  G4Material *fNaI;
   G4Material *fLYSO;
   G4Material *fTeflon;
   G4Material *fLutetiumOxide;

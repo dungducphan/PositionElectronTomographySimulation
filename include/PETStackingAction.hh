@@ -23,6 +23,8 @@ class PETStackingAction : public G4UserStackingAction
   PETRunAction *fRunAction;
   
   G4int gammaCounter;
+
+  G4int EventID;
   
 };
 

@@ -52,6 +52,7 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   G4int TrackID;
   G4int ParentID;
   G4int Step_Number = theTrack->GetCurrentStepNumber();
+  G4double Energy_gamma = theTrack->GetTotalEnergy();
   
   
   //  if(theTrack->GetCreatorProcess()!=0){
@@ -93,10 +94,9 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   }
 
 
-  if (thePostPVname == "detector"){
-    std::cout<<"CHEEEEEEEEEEAAAAAAAAAABBBBBOOOOOOOOOOOOYYYYYYY"<<std::endl;
-    theTrack->SetTrackStatus(fStopAndKill);
-  }
+  //  if (thePostPVname == "detector"){
+  // theTrack->SetTrackStatus(fStopAndKill);
+  //}
   
   // if (theTrack->GetParentID() > 0){
   //   std::cout<<thePostPVname<<std::endl;   
@@ -117,24 +117,30 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
     }
   }
   
-  //  switch (theStatus) {
-    // Detected by a detector
-  //case Detection:
-    // Check if the photon hits the detector and process the hit if it does
-    //      if ( thePostPVname == "DetectorPhy" ) {
-  if (thePostPVname == "detector") {
-    std::cout << "Photon is detected." << std::endl;
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    G4String SDname="TrackerChamberSD";
-    PETTrackerSD* mppcSD = (PETTrackerSD*)SDman->FindSensitiveDetector(SDname);
-    if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
-    // Stop Tracking when it hits the detector's surface
-    theTrack->SetTrackStatus(fStopAndKill);
-    return;
-  }
-  //break;
-  
-  //default: break;
-    //}
-  
+
+    {
+      //      switch (theStatus)
+	{
+	  // Detected by a detector
+	  //case Detection:
+	  //	case 12:
+	  // Check if the photon hits the detector and process the hit if it does
+	  if(theTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition())
+	    {
+	      if (thePostPVname == "detector") {
+		std::cout << "Photon is detected." << std::endl;
+		G4SDManager* SDman = G4SDManager::GetSDMpointer();
+		G4String SDname="TrackerChamberSD";
+		PETTrackerSD* mppcSD = (PETTrackerSD*)SDman->FindSensitiveDetector(SDname);
+		if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
+		// Stop Tracking when it hits the detector's surface
+		theTrack->SetTrackStatus(fStopAndKill);
+		return;
+	      }
+	      //break;
+	      
+	      //	    default: break;
+	    }
+	}
+    }
 }

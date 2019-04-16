@@ -23,7 +23,7 @@ public:
   void  SetRndmFreq(G4int val) { fSaveRndm = val; }
   G4int GetRndmFreq()          { return fSaveRndm; }
 
-  virtual void FillEventHitTree(G4int NumberOfHitInAnEvent, G4double EnergyOfPhoton,G4double wavelengthOfPhotonHit, G4double Pos_x, G4double Pos_y, G4double Pos_z);
+  virtual void FillEventHitTree(G4int NumberOfHitInAnEvent, G4double EnergyOfPhoton,G4double wavelengthOfPhotonHit, G4double Pos_x, G4double Pos_y, G4double Pos_z, G4double Time);
   virtual void FillSecondaryTree(G4double Sec_x, G4double Sec_y, G4double Sec_z, G4double Sec_energy);
   virtual void FillGammaTree(G4int gammaCounter);
 
@@ -43,6 +43,7 @@ private:
   G4double posx;
   G4double posy;
   G4double posz;
+  G4double time;
   G4int GammaCount;
   G4String name;
   G4double compt_energy;

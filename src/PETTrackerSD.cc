@@ -57,8 +57,11 @@ G4bool PETTrackerSD::ProcessHits_constStep(const G4Step * aStep, G4TouchableHist
 
   // Convert the global coordinate for arriving photons into
   // the local coordinate of the detector
-  photonArrive = theTouchable->GetHistory()->
-      GetTopTransform().TransformPoint(photonArrive);
+
+
+  //This is the thing you just did
+  //photonArrive = theTouchable->GetHistory()->
+  //GetTopTransform().TransformPoint(photonArrive);
 
   // Creating the hit and add it to the collection
   fPhotonDetHitCollection->insert(new PETTrackerHit(photonArrive, arrivalTime, energy));
