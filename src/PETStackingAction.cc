@@ -36,9 +36,10 @@ PETStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 	G4double Sec_x  = aTrack->GetVertexPosition().x();
 	G4double Sec_y  = aTrack->GetVertexPosition().y();
 	G4double Sec_z  = aTrack->GetVertexPosition().z();
-	std::ofstream myfile("Sec_depth.txt", std::ios_base::app);
-	myfile << Sec_x <<std::endl;
-	myfile.close();
+	G4double Time = aTrack->GetLocalTime()/CLHEP::ns;
+	//	std::ofstream myfile("Sec_depth.txt", std::ios_base::app);
+	//myfile << Sec_x <<std::endl;
+	//myfile.close();
 	// std::cout<<name<<"\t" <<  Sec_energy << std::endl;
 	fRunAction->FillSecondaryTree(Sec_x, Sec_y, Sec_z, Sec_energy);
       }
@@ -63,9 +64,9 @@ void PETStackingAction::NewStage()
 {
   G4cout << "Number of gamma produces in this event : "
 	 << gammaCounter << G4endl;
-  std::ofstream myfile1("gammaCount.txt", std::ios_base::app);
-  myfile1 << gammaCounter <<std::endl;
-  myfile1.close();
+  //  std::ofstream myfile1("gammaCount.txt", std::ios_base::app);
+  //myfile1 << gammaCounter <<std::endl;
+  //myfile1.close();
   fRunAction->FillGammaTree(gammaCounter);
 }
 

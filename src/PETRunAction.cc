@@ -1,5 +1,6 @@
 #include "PETRunAction.hh"
 #include "TFile.h"
+#include <time.h>
 
 PETRunAction::PETRunAction() : G4UserRunAction(), fSaveRndm(0), fAutoSeed(false) {
   G4RunManager::GetRunManager()->SetPrintProgress(1000);
@@ -10,9 +11,9 @@ PETRunAction::~PETRunAction() {
 
 void PETRunAction::BeginOfRunAction(const G4Run *run) {
 
-  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
+  //  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
-  outputFilename = new TFile("doesntmatter.root", "RECREATE");
+  outputFilename = new TFile("idk.root", "RECREATE");
   eventTree = new TTree("HitTree", "Hit Statistics");
   eventTree->Branch("eventHit", &eventHit, "eventHit/I");
   eventTree->Branch("energy", &energy, "energy/D");
@@ -29,11 +30,11 @@ void PETRunAction::BeginOfRunAction(const G4Run *run) {
   gammaTree = new TTree("GammaTree", "Gamma Stats");
   gammaTree->Branch("GammaCount", &GammaCount, "GammaCount/I");
 
-  //eventHit = 0;
-
-  // G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  // G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
-
+  //  eventHit = 0;
+  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
+  
   // if (1) {
   //   // automatic (time-based) random seeds for each run
   //   G4cout << "*******************" << G4endl;
@@ -48,15 +49,17 @@ void PETRunAction::BeginOfRunAction(const G4Run *run) {
   // } else {
   //   G4Random::showEngineStatus();
   // }
-
+  
   // if (fSaveRndm > 0) G4Random::saveEngineStatus("BeginOfRun.rndm");
-
+  
   
 }
 
 void PETRunAction::EndOfRunAction(const G4Run *run) {
 
   eventTree->Write(0, TObject::kOverwrite);
+  secTree->Write(0, TObject::kOverwrite);
+  gammaTree->Write(0, TObject::kOverwrite);
   outputFilename->Write(0, TObject::kOverwrite);
   outputFilename->Close();
 

@@ -36,6 +36,7 @@ void PETEventAction::EndOfEventAction(const G4Event *event) {
   G4HCofThisEvent* HCE = event->GetHCofThisEvent();
   PETTrackerHitsCollection* mppcHC = 0;
 
+  G4int EventID = G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID();
 
 
   // Get the hit collections
@@ -58,7 +59,10 @@ void PETEventAction::EndOfEventAction(const G4Event *event) {
       G4double xpos = photonArrive.x();
       G4double ypos = photonArrive.y();
       G4double zpos = photonArrive.z();
-      fRunAction->FillEventHitTree(n_hit, energy, wavelength, xpos, ypos, zpos, time);
+      std::ofstream myfile2("time_2.txt", std::ios_base::app);
+      myfile2 << EventID << ","<<energy<<","<<xpos<<","<<ypos<<","<<zpos<<","<<time<<std::endl;
+      myfile2.close();
+      fRunAction->FillEventHitTree(EventID, energy, wavelength, xpos, ypos, zpos, time);
       
       //      std::cout<<"Number of Hits =  " <<n_hit<<std::endl;
     }

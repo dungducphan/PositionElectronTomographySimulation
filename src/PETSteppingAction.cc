@@ -55,6 +55,7 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   G4double Energy_gamma = theTrack->GetTotalEnergy();
   
   
+  
   //  if(theTrack->GetCreatorProcess()!=0){
   //  if(theTrack->GetParentID()==0){
     //if(theTrack->GetCreatorProcess()->GetProcessName()=="compt"){
@@ -85,6 +86,7 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
 
 
+
   G4String thePrePVname  = " ";
   G4String thePostPVname = " ";
 
@@ -93,6 +95,10 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
     thePostPVname = thePostPV->GetName();
   }
 
+  
+  G4TouchableHistory* theTouchable = (G4TouchableHistory*)(thePostPoint->GetTouchable());
+  G4int copyNumber = theTouchable->GetCopyNumber();
+  
 
   //  if (thePostPVname == "detector"){
   // theTrack->SetTrackStatus(fStopAndKill);
@@ -118,29 +124,32 @@ void PETSteppingAction::UserSteppingAction(const G4Step * theStep) {
   }
   
 
-    {
-      //      switch (theStatus)
-	{
+  //  {
+    //      switch (theStatus)
+  //	{
 	  // Detected by a detector
 	  //case Detection:
 	  //	case 12:
 	  // Check if the photon hits the detector and process the hit if it does
-	  if(theTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition())
-	    {
-	      if (thePostPVname == "detector") {
-		std::cout << "Photon is detected." << std::endl;
-		G4SDManager* SDman = G4SDManager::GetSDMpointer();
-		G4String SDname="TrackerChamberSD";
-		PETTrackerSD* mppcSD = (PETTrackerSD*)SDman->FindSensitiveDetector(SDname);
-		if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
-		// Stop Tracking when it hits the detector's surface
-		theTrack->SetTrackStatus(fStopAndKill);
-		return;
-	      }
-	      //break;
-	      
-	      //	    default: break;
-	    }
-	}
+  if(theTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition())
+    {
+      if (thePostPVname == "detector") {
+	//std::cout << "Photon is detected." << std::endl;
+	std::cout<<copyNumber<<std::endl;
+	std::ofstream myfile3("which_detector_2.txt", std::ios_base::app);
+	myfile3 << EventID << "," << copyNumber<<std::endl;
+	myfile3.close();
+	G4SDManager* SDman = G4SDManager::GetSDMpointer();
+	G4String SDname="TrackerChamberSD";
+	PETTrackerSD* mppcSD = (PETTrackerSD*)SDman->FindSensitiveDetector(SDname);
+	if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
+	// Stop Tracking when it hits the detector's surface
+	theTrack->SetTrackStatus(fStopAndKill);
+	return;
+      }
+      //	      break;
+      //	      default: break;
+      //	    }
     }
+  //}
 }

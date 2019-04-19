@@ -178,7 +178,7 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
   // waterPhy = new G4PVPlacement(0, G4ThreeVector(0,0,0), waterLog, "WaterPhy", worldLog, false, checkOverlaps);
 
   
-  G4double thickness = 2.5*cm;
+  G4double thickness = 3.*cm;
   G4double cryst_dX = thickness, cryst_dY = 18*mm, cryst_dZ = 18*mm, det_dX = 1*mm;
   G4int nb_cryst = 32;
   G4double dPhi = twopi/nb_cryst, half_dPhi = 0.5*dPhi;
@@ -230,6 +230,7 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
     G4Transform3D transform_cryst = G4Transform3D(rotm,position_cryst);
     G4Transform3D transform_det = G4Transform3D(rotm,position_det);
     G4Transform3D transform_gel = G4Transform3D(rotg,position_gel);
+    G4String detector = "detector";
     
     new G4PVPlacement(transform_cryst,             //rotation,position
 		      logicCryst,            //its logical volume
@@ -240,7 +241,7 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
 		      checkOverlaps);       // checking overlaps
     new G4PVPlacement(transform_det,             //rotation,position
     		      logicDet_outter,            //its logical volume
-    		      "detector",             //its name
+		      "detector",             //its name
     		      worldLog,//logicRing,             //its mother  volume
     		      false,                 //no boolean operation
     		      icrys,                 //copy number
@@ -250,7 +251,7 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
     		      "detector",             //its name
     		      worldLog,//logicRing,             //its mother  volume
     		      false,                 //no boolean operation
-    		      icrys,                 //copy number
+    		      icrys+nb_cryst,                 //copy number
     		      checkOverlaps);       // checking overlaps
     new G4PVPlacement(transform_gel,
 		      logicGel,
