@@ -31,8 +31,8 @@ PETDetectorConstruction::PETDetectorConstruction()
   fHeight(10*cm),
   worldLog(NULL),
   worldPhy(NULL),
-  sCrystal_Log(NULL) {
-    fMessenger = new PETDetectorMessenger(this);
+  logicCryst(NULL) {
+  fMessenger = new PETDetectorMessenger(this);
 }
 
 PETDetectorConstruction::~PETDetectorConstruction() {
@@ -68,6 +68,10 @@ void PETDetectorConstruction::BuildMaterial() {
   // SiO2
   fSiliconDioxide = nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
 
+  //Silica Gel
+  fGel = new G4Material("Gel", 2.21 * g/cm3, 1);
+  fGel->AddMaterial(fSiliconDioxide, 100* perCent);
+
   // Y2O3
   fYttriumOxide = new G4Material("YttriumOxide", 5.01 * g / cm3, 2);
   fYttriumOxide->AddElement(Yttrium, 2);
@@ -92,51 +96,13 @@ void PETDetectorConstruction::BuildMaterial() {
 
   G4double abs[num] = {1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm,1.2*cm};
 
-   // G4double abs[num] = {50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm,50*cm};
-
-
-
-
-
-
-  //  G4double ene[num] = {1.79 * eV, 1.85 * eV, 1.91 * eV, 1.97 * eV,
-  //                   2.04 * eV, 2.11 * eV, 2.19 * eV, 2.27 * eV,
-  //                   2.36 * eV, 2.45 * eV, 2.56 * eV, 2.67 * eV,
-  //                   2.80 * eV, 2.94 * eV, 3.09 * eV, 3.25 * eV,
-  //                   3.44 * eV, 3.65 * eV, 3.89 * eV, 4.16 * eV,
-  //                   4.43 * eV};
-  //
-  //G4double fast[num] = {0.01, 0.10, 0.20, 0.50,
-  //                  0.90, 1.70, 2.90, 5.00,
-  //                    8.30, 12.5, 17.0, 22.9,
-  //                    26.4, 25.6, 16.8, 4.20,
-  //                    0.30, 0.20, 0.10, 0.01,
-  //                    0.00};
-
-  //G4double rLyso[num] = {1.81, 1.81, 1.81, 1.81,
-  //                     1.81, 1.81, 1.81, 1.81,
-  //                     1.81, 1.81, 1.81, 1.81,
-  //                     1.81, 1.81, 1.81, 1.81,
-  //                     1.81, 1.81, 1.81, 1.81,
-  //                     1.81};
-  //G4double rAir[num] = {1.00, 1.00, 1.00, 1.00,
-  //                    1.00, 1.00, 1.00, 1.00,
-  //                    1.00, 1.00, 1.00, 1.00,
-  //                    1.00, 1.00, 1.00, 1.00,
-  //                    1.00, 1.00, 1.00, 1.00,
-  //                    1.00};
-
-  //G4double abs[num] = {50 * cm, 50 * cm, 50 * cm, 50 * cm,
-  //                   50 * cm, 50 * cm, 50 * cm, 50 * cm,
-  //                   50 * cm, 50 * cm, 50 * cm, 50 * cm,
-  //                   50 * cm, 50 * cm, 50 * cm, 50 * cm,
-  //                   50 * cm, 50 * cm, 50 * cm, 50 * cm,
-  //                   50 * cm};
-
   fLYSO_MPT = new G4MaterialPropertiesTable();
   fAir_MPT = new G4MaterialPropertiesTable();
+  fGel_MPT = new G4MaterialPropertiesTable();
+  
 
 
+  //Rise and Decay Time  https://iopscience.iop.org/article/10.1088/1748-0221/7/09/P09004/pdf 
 
   fLYSO_MPT->AddProperty("FASTCOMPONENT", ene, fast, num)->SetSpline(true);
   fLYSO_MPT->AddProperty("RINDEX", ene, rLyso, num);
@@ -144,13 +110,17 @@ void PETDetectorConstruction::BuildMaterial() {
   fLYSO_MPT->AddConstProperty("SCINTILLATIONYIELD", 30000 / MeV);
   fLYSO_MPT->AddConstProperty("RESOLUTIONSCALE", 1);
   fLYSO_MPT->AddConstProperty("FASTTIMECONSTANT", 43 * ns);
+  fLYSO_MPT->AddConstProperty("RISETIMECONSTANT", 72 * ps);
 
   fAir_MPT->AddProperty("RINDEX", ene, rAir, num);
+
+  fGel_MPT->AddProperty("RINDEX", ene, rLyso, num);
 
 
 
   fLYSO->SetMaterialPropertiesTable(fLYSO_MPT);
   fAir->SetMaterialPropertiesTable(fAir_MPT);
+  fGel->SetMaterialPropertiesTable(fGel_MPT);
 
 
 }
@@ -178,75 +148,86 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
   // waterPhy = new G4PVPlacement(0, G4ThreeVector(0,0,0), waterLog, "WaterPhy", worldLog, false, checkOverlaps);
 
   
-  G4double thickness = 3.*cm;
-  G4double cryst_dX = thickness, cryst_dY = 18*mm, cryst_dZ = 18*mm, det_dX = 1*mm;
+  G4double cryst_dX = 30*mm, cryst_dY = 30*mm, cryst_dZ = 30*mm, det_dZ = 1*mm;
   G4int nb_cryst = 32;
   G4double dPhi = twopi/nb_cryst, half_dPhi = 0.5*dPhi;
   G4double cosdPhi = std::cos(half_dPhi);
   G4double tandPhi = std::tan(half_dPhi);
   G4double ring_R1 = 0.5*cryst_dY/tandPhi;
-  G4double ring_R2 = (ring_R1+cryst_dX)/cosdPhi;
+  G4double ring_R2 = (ring_R1+cryst_dZ)/cosdPhi;
 
-  // G4Tubs* waterRing =
-  //   new G4Tubs("waterRing", 0, ring_R1-5*mm, 0.5*cryst_dX, 0., twopi);
-  // G4LogicalVolume* waterLog = new G4LogicalVolume(waterRing, fWater,"Waterlog");
-  // G4VPhysicalVolume* waterPhy = new G4PVPlacement(NULL, G4ThreeVector(0,0,0), waterLog, "Ring Phys Vol", worldLog, false, 0);
+  std::cout<<ring_R1<<std::endl;
 
-  G4double gap = 0.005*mm;
+
+  G4double gap = 0.2*mm;
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap;
 
-  //G4Box* solidCryst = new G4Box("crystal", 3*cm, 3*cm, 1.5*cm);
-  G4Tubs* solidCryst = new G4Tubs("crystal", ring_R1, ring_R2, 0.5*cryst_dX, 0, twopi/(nb_cryst+gap));
-  G4LogicalVolume* logicCryst =
-    new G4LogicalVolume(solidCryst,
-                        fLYSO,
-                        "CrystalLV");
-  G4Tubs* solidGel = new G4Tubs("gel", ring_R1, ring_R2+det_dX, cryst_dX/2, -2*gap/ring_R2, 2*gap/ring_R2);
-  G4LogicalVolume* logicGel = new G4LogicalVolume(solidGel, fLYSO, "GelLV");
-  G4Tubs* solidDet_outter = new G4Tubs("detector", ring_R2, ring_R2+det_dX, 0.5*cryst_dX, 0, twopi/(nb_cryst+gap));
-  G4Tubs* solidDet_inner = new G4Tubs("detector", ring_R1-det_dX, ring_R1, 0.5*cryst_dX, 0, twopi/(nb_cryst+gap));
-  G4LogicalVolume* logicDet_outter =
-    new G4LogicalVolume(solidDet_outter,
-                        fAir,
-                        "DetectorLV");
-  G4LogicalVolume* logicDet_inner =
-    new G4LogicalVolume(solidDet_inner,
-			fAir,
-			"DetectorLV");
-  //  detectorPhy = new G4PVPlacement(NULL, G4ThreeVector(0,0,0), logicDet, "DetectorPhy", worldLog, false, 0);
+  solidCryst = new G4Box("crystal", dX/2, dY/2, cryst_dZ/2);
+  logicCryst = new G4LogicalVolume(solidCryst, fLYSO, "CrystalLV");
+
+  solidDet_outter = new G4Box("detector", dX/2, dY/2, det_dZ/2);
+  solidDet_inner = new G4Box("detector", dX/2, dY/2, det_dZ/2);
+  logicDet_outter = new G4LogicalVolume(solidDet_outter, fAir, "DetectorLV");
+  logicDet_inner = new G4LogicalVolume(solidDet_outter, fAir, "DetectorLV");
+
+  
+  G4double pDx1= dX/2, pDx2=dX/2, pDz= (cryst_dZ)/2, pTheta =0, pPhi =0, pDy1 = gap/2, pDy2 = (5.8*mm)/2, pDx3 = (cryst_dZ+gap)/2, pDx4 = (cryst_dZ+gap)/2, pAlp1 = 0*degree,pAlp2 = 0*degree ;
+  
+  solidGel = new G4Trap("gel", pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pAlp1, pDy2, pDx3, pDx4, pAlp2);
+  //  solidGel = new G4Trap("gel", cryst_dZ+2*det_dZ, dY, 2*cryst_dZ+gap, gap);
+  logicGel = new G4LogicalVolume(solidGel, fGel, "GelLV");
+  //  solidGel = new G4Tubs("gel", ring_R1, ring_R2+det_dZ, cryst_dX/2, 0, 2*gap/ring_R2);//-2*gap/ring_R2, 2*gap/ring_R2);
+  //  G4Tubs* solidDet_outter = new G4Tubs("detector", ring_R2, ring_R2+det_dX, 0.5*cryst_dX, 0, twopi/(nb_cryst+gap));
+  //G4Tubs* solidDet_inner = new G4Tubs("detector", ring_R1-det_dX, ring_R1, 0.5*cryst_dX, 0, twopi/(nb_cryst+gap));
+  //G4LogicalVolume* logicDet_outter =
+  //new G4LogicalVolume(solidDet_outter,
+  //                    fAir,
+  //                    "DetectorLV");
+  //G4LogicalVolume* logicDet_inner =
+  //new G4LogicalVolume(solidDet_inner,
+  //			fAir,
+  //			"DetectorLV");
   for (G4int icrys = 0; icrys < nb_cryst ; icrys++) {
     G4double phi = icrys*dPhi;
-    G4RotationMatrix rotm  = G4RotationMatrix();
-    rotm.rotateY(0);
-    rotm.rotateZ(phi+15*degree);
+    G4double gphi = icrys*dPhi+half_dPhi;
+    G4RotationMatrix rotm = G4RotationMatrix();
+    rotm.rotateY(90*degree);
+    rotm.rotateZ(phi);
+    
+    G4RotationMatrix rotd = G4RotationMatrix();
+    rotd.rotateY(90*degree);
+    rotd.rotateZ(phi);
+    
     G4RotationMatrix rotg = G4RotationMatrix();
-    //    rotg.rotateY(90*degree);
-    rotg.rotateZ(phi+15*degree);
-    //rotg.rotateX(90*degree);
-    G4ThreeVector uz = G4ThreeVector(std::cos(phi),  std::sin(phi),0.);
-    G4ThreeVector position_cryst = G4ThreeVector(0,0,0); //*uz);//+0.5*cryst_dZ)*uz;
-    G4ThreeVector position_det = G4ThreeVector(0,0,0); //(ring_R2+0.5*det_dZ)*uz;
-    G4ThreeVector position_gel = G4ThreeVector(0,0,0);//uz*(ring_R1+0.5*cryst_dZ); //+0.5*cryst_dZ*uz);
+    rotg.rotateY(90*degree);
+    rotg.rotateZ(gphi);
+   
+    G4ThreeVector uz = G4ThreeVector(std::cos(phi),  std::sin(phi), 0);
+    G4ThreeVector ug = G4ThreeVector(std::cos(gphi),  std::sin(gphi), 0);
+    G4ThreeVector position_cryst = (ring_R1+0.5*cryst_dZ)*uz;
+    G4ThreeVector position_det_outter = (ring_R2-0.5*det_dZ)*uz;
+    G4ThreeVector position_det_inner = (ring_R1-0.5*det_dZ)*uz;
+    G4ThreeVector position_gel = (ring_R1+0.5*cryst_dZ)*ug;
     G4Transform3D transform_cryst = G4Transform3D(rotm,position_cryst);
-    G4Transform3D transform_det = G4Transform3D(rotm,position_det);
+    G4Transform3D transform_det_outter = G4Transform3D(rotm,position_det_outter);
+    G4Transform3D transform_det_inner = G4Transform3D(rotm,position_det_inner);
     G4Transform3D transform_gel = G4Transform3D(rotg,position_gel);
     G4String detector = "detector";
-    
     new G4PVPlacement(transform_cryst,             //rotation,position
-		      logicCryst,            //its logical volume
-		      "crystal",             //its name
-		      worldLog,//logicRing,             //its mother  volume
-		      false,                 //no boolean operation
-		      icrys,                 //copy number
-		      checkOverlaps);       // checking overlaps
-    new G4PVPlacement(transform_det,             //rotation,position
-    		      logicDet_outter,            //its logical volume
-		      "detector",             //its name
+    		      logicCryst,            //its logical volume
+    		      "crystal",             //its name
     		      worldLog,//logicRing,             //its mother  volume
     		      false,                 //no boolean operation
     		      icrys,                 //copy number
     		      checkOverlaps);       // checking overlaps
-    new G4PVPlacement(transform_det,             //rotation,position
+    new G4PVPlacement(transform_det_outter,             //rotation,position
+    		      logicDet_outter,            //its logical volume
+    		      "detector",             //its name
+    		      worldLog,//logicRing,             //its mother  volume
+    		      false,                 //no boolean operation
+    		      icrys,                 //copy number
+    		      checkOverlaps);       // checking overlaps
+    new G4PVPlacement(transform_det_inner,             //rotation,position
     		      logicDet_inner,            //its logical volume
     		      "detector",             //its name
     		      worldLog,//logicRing,             //its mother  volume
@@ -254,85 +235,43 @@ G4VPhysicalVolume * PETDetectorConstruction::Construct() {
     		      icrys+nb_cryst,                 //copy number
     		      checkOverlaps);       // checking overlaps
     new G4PVPlacement(transform_gel,
-		      logicGel,
-		      "gel",
-		      worldLog,
-		      false,
-		      icrys,
-		      checkOverlaps);
+    		      logicGel,
+    		      "gel",
+    		      worldLog,
+    		      false,
+    		      icrys,
+    		      checkOverlaps);
 
   }
-  
-  // sCrystal_Mod = new G4Tubs(
-  //   "SingleCrystalModel",
-  //   fInnerDiameter,
-  //   fOuterDiameter,
-  //   fHeight*0.5,
-  //   0,
-  //   CLHEP::twopi);
-
-  // sDet_Mod = new G4Tubs(
-  //   "detector",
-  //   fOuterDiameter,
-  //   fOuterDiameter+0.2,
-  //   fHeight*0.5,
-  //   0,
-  //   fOpeningAngle);
-
-  //G4double thickness = 25*mm/2;
-  //G4double width = 18*mm/2;//26.6*mm/2;
-  //G4double height = 18*mm/2;//27.7*mm/2;
-  //sCrystal_Mod = new G4Box("SingleCrystalModel", height, width,thickness);
-  //sDet_Mod = new G4Box("detector", height, width, 1*mm);
-
-  
-
-  //detectorLog = new G4LogicalVolume(sDet_Mod, fLYSO, "DetectorLog", 0, 0, 0);
-    
-  //sCrystal_Log = new G4LogicalVolume(sCrystal_Mod, fLYSO, "SingleCrystalLogicalVolume", 0, 0, 0);
-
-  // worldBox = new G4Box("WorldBox", world_hx, world_hy, world_hz);
-  // worldLog = new G4LogicalVolume(worldBox, fAir, "WorldLog");
-  // worldPhy = new G4PVPlacement(0, G4ThreeVector(), worldLog, "WorldPhy", 0, false, 0, checkOverlaps);
-  
-
-  //  sCrystal_Phy = new G4PVPlacement(NULL, G4ThreeVector(0,0,-thickness), sCrystal_Log, "SingleCrystalPhysicalVolume", worldLog, false, 0);
-  //  detectorPhy = new G4PVPlacement(NULL, G4ThreeVector(0,0,-2*thickness-1*mm), detectorLog, "DetectorPhy", worldLog, false, 0);
   
 
   G4VisAttributes* crystVisAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   G4VisAttributes* SiPMVisAttributes = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  G4VisAttributes* GelVisAttributes = new G4VisAttributes(G4Colour(1.0,0.0,0.0));
 
-  G4VisAttributes* waterVisAttributes = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  logicGel->SetVisAttributes(GelVisAttributes);
 
-  //G4OpticalSurface* ScintWrap = new G4OpticalSurface("ScintWrap");
-  //  new G4LogicalBorderSurface("wrap_surface", worldPhy, solidDet, ScintWrap);
-  //  ScintWrap->SetType(dielectric_metal);
-  // G4MaterialPropertiesTable *WMPT = new G4MaterialPropertiesTable();
-  //  WMPT -> AddProperty(“REFLECTIVITY”,pp,reflectivity,NUM);
-
-  logicGel->SetVisAttributes(SiPMVisAttributes);
-  //waterLog->SetVisAttributes(waterVisAttributes);
-  //detectorLog->SetVisAttributes(SiPMVisAttributes);
+  logicDet_outter->SetVisAttributes(SiPMVisAttributes);
+  logicDet_inner->SetVisAttributes(SiPMVisAttributes);
 
 
 
-  G4OpticalSurface* opDetectorSurface = new G4OpticalSurface("DetectorSurface");
-  //  opDetectorSurface->SetType(dielectric_metal);
-  opDetectorSurface->SetFinish(ground);
-  //opDetectorSurface->SetModel(glisur);
-  G4LogicalSkinSurface* detectorSurface_inner = new G4LogicalSkinSurface("DetectorSurface", logicDet_inner, opDetectorSurface);
-  G4LogicalSkinSurface* detectorSurface_outter = new G4LogicalSkinSurface("DetectorSurface", logicDet_outter, opDetectorSurface);
+  // G4OpticalSurface* opDetectorSurface = new G4OpticalSurface("DetectorSurface");
+  // //  opDetectorSurface->SetType(dielectric_metal);
+  // opDetectorSurface->SetFinish(ground);
+  // //opDetectorSurface->SetModel(glisur);
+  // G4LogicalSkinSurface* detectorSurface_inner = new G4LogicalSkinSurface("DetectorSurface", logicDet_inner, opDetectorSurface);
+  // G4LogicalSkinSurface* detectorSurface_outter = new G4LogicalSkinSurface("DetectorSurface", logicDet_outter, opDetectorSurface);
 
 
   G4double ephoton_pmt[4]      = {0.0001*eV, 1*eV, 10*eV, 100*eV};
   G4double reflectivity_pmt[4] = {0,0,0,0};
   G4double efficiency_pmt[4]   = {1.0,1.0,1.0,1.0};
 
-  G4MaterialPropertiesTable *detectorMPT = new G4MaterialPropertiesTable();
-  detectorMPT->AddProperty("REFLECTIVITY", ephoton_pmt, reflectivity_pmt, 4);
-  detectorMPT->AddProperty("EFFICIENCY",   ephoton_pmt, efficiency_pmt,   4);
-  opDetectorSurface->SetMaterialPropertiesTable(detectorMPT);
+  // G4MaterialPropertiesTable *detectorMPT = new G4MaterialPropertiesTable();
+  // detectorMPT->AddProperty("REFLECTIVITY", ephoton_pmt, reflectivity_pmt, 4);
+  // detectorMPT->AddProperty("EFFICIENCY",   ephoton_pmt, efficiency_pmt,   4);
+  // opDetectorSurface->SetMaterialPropertiesTable(detectorMPT);
 
 
 
