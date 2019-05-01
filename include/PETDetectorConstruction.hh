@@ -8,6 +8,7 @@
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4Box.hh"
+#include "G4Trap.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -48,6 +49,7 @@ private:
   G4double fOuterDiameter;
   G4double fHeight;
 
+
   G4double world_hx;
   G4double world_hy;
   G4double world_hz;
@@ -55,33 +57,32 @@ private:
   G4LogicalVolume *worldLog;
   G4VPhysicalVolume *worldPhy;
 
-  G4Box *waterBox;
-  G4LogicalVolume *waterLog;
-  G4VPhysicalVolume *waterPhy;
+  G4Box *solidCryst;
+  G4LogicalVolume *logicCryst;
 
+  G4Box *solidDet_outter;
+  G4Box *solidDet_inner;
+  G4LogicalVolume *logicDet_outter;
+  G4LogicalVolume *logicDet_inner;
 
+  G4Trap *solidGel;
+  //  G4Tubs *solidGel;
+  G4LogicalVolume *logicGel;
+ 
   
-  G4Box *sCrystal_Mod;
-  G4Box *sDet_Mod;
-  G4LogicalVolume *sCrystal_Log;
-  G4LogicalVolume *detectorLog;
-  G4LogicalVolume *wrapLog;
-  G4VPhysicalVolume *sCrystal_Phy;
-  G4VPhysicalVolume *detectorPhy;
-  G4VPhysicalVolume *sTop_Wrap_Phy;
-
   G4Material *fAir;
-  G4Material *fWater;
   G4Material *fNaI;
   G4Material *fLYSO;
   G4Material *fTeflon;
   G4Material *fLutetiumOxide;
   G4Material *fYttriumOxide;
   G4Material *fSiliconDioxide;
+  G4Material *fGel;
   G4MaterialPropertiesTable *fLYSO_MPT;
   G4MaterialPropertiesTable *fAir_MPT;
-  G4MaterialPropertiesTable *fTeflon_MPT;
+  G4MaterialPropertiesTable *fGel_MPT;
 
+  
   PETDetectorMessenger *fMessenger;
 };
 
